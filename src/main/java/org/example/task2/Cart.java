@@ -4,19 +4,20 @@ import java.util.Arrays;
 
 public class Cart {
 
-    public Item[] contents;
-    int index;
+    private Item[] contents;
+    private int index;
 
-    Cart(Item[] _contents) {
-        this.contents = _contents;
+    Cart(int capacity) {
+        this.contents = new Item[capacity];
+        this.index = 0;
     }
 
-    public void removeById(int itemIndex) {
+    public void removeById(long id) {
 
         if (index == 0)
             return;
 
-        int foundItemIndex = findItemInArray(contents[itemIndex]);
+        int foundItemIndex = findItemIndexById(id);
 
         if (foundItemIndex == -1)
             return;
@@ -30,7 +31,7 @@ public class Cart {
         shiftArray(foundItemIndex);
     }
 
-    public void shiftArray(int itemIndex) {
+    private void shiftArray(int itemIndex) {
         for (int i = itemIndex; i < index - 1; i++) {
             contents[i] = contents[i + 1];
         }
@@ -38,9 +39,9 @@ public class Cart {
         index--;
     }
 
-    public int findItemInArray(Item item) {
+    private int findItemIndexById(long id) {
         for (int i = 0; i < index; i++) {
-            if (contents[i].id == item.id) {
+            if (contents[i].getId() == id) {
                 return i;
             }
         }
@@ -60,10 +61,19 @@ public class Cart {
         return index == contents.length;
     }
 
+    public Item[] getContents() {
+        return contents;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
     @Override
     public String toString() {
+        Item[] actualItems = Arrays.copyOf(contents, index);
         return "Cart{" +
-                "contents=" + Arrays.toString(contents) +
+                "contents=" + Arrays.toString(actualItems) +
                 '}' + "\n";
     }
 }
